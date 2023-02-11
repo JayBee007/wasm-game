@@ -1,6 +1,7 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const dist = path.resolve(__dirname, "dist");
 
@@ -13,6 +14,9 @@ module.exports = {
   },
   devServer: {
     static: dist,
+  },
+  performance: {
+    hints: false,
   },
   resolve: {
     extensions: [".ts", ".js", ".wasm"],
@@ -30,6 +34,10 @@ module.exports = {
     asyncWebAssembly: true,
   },
   plugins: [
+    new CopyPlugin({patterns: [{
+      from: path.resolve(__dirname, "static/assets"),
+      to: path.resolve(dist, 'assets')
+    }]}),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, "static/index.html"),
     }),
